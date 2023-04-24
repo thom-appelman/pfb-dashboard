@@ -6,6 +6,7 @@ from dash import Dash, html, dcc, Output, Input
 df = pd.read_csv("https://raw.githubusercontent.com/thom-appelman/pfb-dashboard/main/customer_segmentation.csv")
 
 app = Dash(__name__)
+server = app.server
 
 app.layout = html.Div([
     html.Div(children="Customer Segmentation Dashboard - by Thom Appelman"),
