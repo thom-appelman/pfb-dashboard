@@ -45,7 +45,7 @@ app.layout = html.Div([
     dcc.Graph(id="city-barchart")
 ])
 
-
+# Bar chart showing number of customers based on drop-down list of job titles
 @app.callback(
     Output("job-barchart", "figure"),
     Input("xaxis-job", "value"))
@@ -55,6 +55,7 @@ def update_job_barchart(xaxis_column_names):
                        labels=dict(x="Job title", y="Number of customers"))
     return fig
 
+# Showing the total number of customers based on job title selection
 @app.callback(
     Output("total-customers", "children"),
     Input("xaxis-job", "value")
@@ -65,6 +66,7 @@ def update_total_customers(xaxis_column_names):
     total_customers = len(filtered_df)
     return f"Total number of customers based on Job selection: {total_customers}"
 
+# Pie chart showing gender breakdown based on selected job titles
 @app.callback(
     Output("gender-piechart", "figure"),
     Input("xaxis-job", "value")
@@ -77,6 +79,7 @@ def update_gender_pie(xaxis_column_names):
     return fig
 
 
+# Histogram showing the top 5 or bottom 5 countries based on number of customers
 @app.callback(
     Output("countries-barchart", "figure"),
     Input("countries-toggle", "value")
@@ -93,6 +96,7 @@ def update_country_chart(order):
     return fig
 
 
+# Pie chart showing the departments customers shopped at filtered by selected job titles
 @app.callback(
     Output("department-piechart", "figure"),
     Input("xaxis-job", "value")
@@ -101,10 +105,11 @@ def update_department_chart(xaxis_column_names):
     filtered_df = df[df["job_title"].isin(xaxis_column_names)]
     department_count = filtered_df["department"].value_counts()
     fig = px.pie(names=department_count.index, values=department_count.values,
-                 title="Count of department of customer professions")
+                 title="Departments customers shopped at based on job title selection")
     return fig
 
 
+# Bar chart showing the 10 cities with the most customer from the selected country in the drop-down list
 @app.callback(
     Output("city-barchart", "figure"),
     Input("xaxis-country", "value")
@@ -112,8 +117,8 @@ def update_department_chart(xaxis_column_names):
 def update_city_chart(xaxis_column_names):
     filtered_df = df[df["country"] == xaxis_column_names]
     city_count = filtered_df["city"].value_counts()
-    top_five = city_count.head(5)
-    fig = px.histogram(x=top_five.index, y=top_five.values, title="Number of customers by city in selected Country",
+    top_five = city_count.head(10)
+    fig = px.histogram(x=top_five.index, y=top_five.values, title="Top 10 Cities by number of customers in selected country",
                        labels=dict(x="City", y="Number of customers"))
     return fig
 
