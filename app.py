@@ -70,8 +70,8 @@ app.layout = html.Div([
 @app.callback(
     Output("job-barchart", "figure"),
     Input("xaxis-job", "value"))
-def update_job_barchart(xaxis_column_names):
-    filtered_df = df[df["job_title"].isin(xaxis_column_names)]
+def update_job_barchart(selected_jobs):
+    filtered_df = df[df["job_title"].isin(selected_jobs)]
     fig = px.histogram(filtered_df, x="job_title", title="Customers by profession",
                        labels={"job_title": "Profession", "count": "Number of Customers"},
                        color="job_title", template="simple_white")
@@ -83,8 +83,8 @@ def update_job_barchart(xaxis_column_names):
     Output("total-customers", "children"),
     Input("xaxis-job", "value")
 )
-def update_total_customers(xaxis_column_names):
-    filtered_df = df[df["job_title"].isin(xaxis_column_names)]
+def update_total_customers(selected_jobs):
+    filtered_df = df[df["job_title"].isin(selected_jobs)]
     total_customers = len(filtered_df)
     return f"Total number of customers based on Job selection: {total_customers}"
 
@@ -94,8 +94,8 @@ def update_total_customers(xaxis_column_names):
     Output("gender-piechart", "figure"),
     Input("xaxis-job", "value")
 )
-def update_gender_pie(xaxis_column_names):
-    filtered_df = df[df["job_title"].isin(xaxis_column_names)]
+def update_gender_pie(selected_jobs):
+    filtered_df = df[df["job_title"].isin(selected_jobs)]
     gender_count = filtered_df["gender"].value_counts()
     fig = px.pie(names=gender_count.index, values=gender_count.values,
                  title="gender breakdown of customers by selected professions")
@@ -138,12 +138,12 @@ def update_department_pie(gender):
     Output("city-barchart", "figure"),
     Input("xaxis-country", "value")
 )
-def update_city_chart(xaxis_column_names):
-    filtered_df = df[df["country"] == xaxis_column_names]
+def update_city_chart(selected_country):
+    filtered_df = df[df["country"] == selected_country]
     city_count = filtered_df["city"].value_counts()
     top_cities = city_count.head(10)
     fig = px.histogram(x=top_cities.index, y=top_cities.values,
-                       title=f"Top Cities by number of customers in {xaxis_column_names}",
+                       title=f"Top Cities by number of customers in {selected_country}",
                        labels=dict(x="City", y="Number of customers"),
                        color=top_cities.index, template="simple_white")
     return fig
